@@ -1,0 +1,18 @@
+# Vidi Veda Apache Hostinger configuration
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # 1. Do NOT rewrite requests directed at the API directory or script gateways
+  RewriteCond %{REQUEST_URI} ^/api/ [OR]
+  RewriteCond %{REQUEST_URI} ^/api$
+  RewriteRule ^ - [L]
+
+  # 2. Allow direct access to real existing files and assets
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 3. Rewrite all user interface page routes to index.php for SEO injection
+  RewriteRule ^(.*)$ index.php [L]
+</IfModule>
