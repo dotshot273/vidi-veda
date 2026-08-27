@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, MessageCircle, Mail, MapPin, Loader2, CheckCircle2 } from 'lucide-react';
+import { Phone, MessageCircle, Mail, Clock, Loader2, CheckCircle2 } from 'lucide-react';
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -91,10 +91,14 @@ export default function Contact() {
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Call Coordinator</span>
-                    <a href="tel:6398889697" className="font-heading font-extrabold text-lg text-charcoal hover:text-primary-400 transition-colors">
-                      +91 6398889697
+                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Call Us</span>
+                    <a href="tel:6398889697" className="font-heading font-extrabold text-lg text-charcoal hover:text-primary-400 transition-colors block">
+                      +91 63988 89697
                     </a>
+                    <a href="tel:9634347076" className="font-heading font-extrabold text-lg text-charcoal hover:text-primary-400 transition-colors block">
+                      +91 96343 47076
+                    </a>
+                    <span className="text-xs text-muted-grey font-light block mt-0.5">Parent hotline, Mon-Sat 9:00 AM - 8:00 PM</span>
                   </div>
                 </div>
 
@@ -103,15 +107,16 @@ export default function Contact() {
                     <MessageCircle className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">WhatsApp Support</span>
+                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">WhatsApp</span>
                     <a 
                       href="https://wa.me/916398889697?text=Hi%20Vidi%20Veda,%20I%20have%20an%20inquiry."
                       target="_blank"
                       rel="noreferrer"
                       className="font-heading font-extrabold text-lg text-charcoal hover:text-emerald-500 transition-colors"
                     >
-                      Chat on WhatsApp
+                      Chat with us
                     </a>
+                    <span className="text-xs text-muted-grey font-light block mt-0.5">Fastest response — send a screenshot anytime</span>
                   </div>
                 </div>
 
@@ -120,22 +125,24 @@ export default function Contact() {
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Email Support</span>
-                    <a href="mailto:info@vidiveda.com" className="font-heading font-extrabold text-lg text-charcoal hover:text-primary-400 transition-colors">
-                      info@vidiveda.com
+                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Email</span>
+                    <a href="mailto:support.vidiveda@gmail.com" className="font-heading font-extrabold text-lg text-charcoal hover:text-primary-400 transition-colors">
+                      support.vidiveda@gmail.com
                     </a>
+                    <span className="text-xs text-muted-grey font-light block mt-0.5">For detailed queries &amp; documents</span>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-4 bg-primary-50/40 p-4 rounded-2xl border border-primary-100/50">
                   <div className="bg-primary-400 text-white p-3 rounded-xl">
-                    <MapPin className="h-5 w-5" />
+                    <Clock className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Head Office</span>
-                    <span className="font-heading font-bold text-sm text-charcoal">
-                      Bareilly, Uttar Pradesh, India - 243001
+                    <span className="text-xs text-muted-grey font-medium uppercase tracking-wider block">Office Hours</span>
+                    <span className="font-heading font-bold text-sm text-charcoal block">
+                      Mon - Sat, 9:00 AM - 8:00 PM
                     </span>
+                    <span className="text-xs text-muted-grey font-light block mt-0.5">Closed Sundays</span>
                   </div>
                 </div>
               </div>

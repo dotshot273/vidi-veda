@@ -2,105 +2,79 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, Phone, MessageCircle, FileText } from 'lucide-react';
 
-const categories = [
-  { key: 'parents', label: 'Parents', emoji: '👨‍👩‍👧' },
-  { key: 'students', label: 'Students', emoji: '🎓' },
-  { key: 'tutors', label: 'Tutors', emoji: '👨‍🏫' },
-  { key: 'fees', label: 'Fees & Payments', emoji: '💰' },
-];
-
 const faqs = [
   {
-    category: 'parents',
     q: "How do I find the right tutor for my child?",
     a: "Simply share your requirements with us, including your child's class, subjects, board, preferred timings, and learning goals. Our team carefully matches your child with a suitable tutor based on these requirements.",
   },
   {
-    category: 'parents',
     q: "Can I book a demo class before starting regular tuition?",
     a: "Yes. We offer a demo session so that parents and students can interact with the tutor, understand the teaching style, and decide if it is the right fit before starting regular classes.",
   },
   {
-    category: 'parents',
-    q: "What if I am not satisfied with the tutor?",
-    a: "Your satisfaction is important to us. If the tutor is not the right fit for your child, our team will work with you to find a suitable replacement whenever possible.",
-  },
-  {
-    category: 'parents',
-    q: "How do parents track student progress?",
-    a: "Regular feedback, performance discussions, and progress updates help parents stay informed about their child's learning journey and academic improvement.",
-  },
-  {
-    category: 'students',
-    q: "Do you provide home tuition or online classes?",
-    a: "We provide both home tuition and online learning support. Parents can choose the option that best suits their child's learning needs and schedule.",
-  },
-  {
-    category: 'students',
-    q: "Which classes do you cover?",
-    a: "We provide tutoring support from Play Group and Primary Classes to Class 12, including academic guidance for school studies, board exams, and foundation learning programs.",
-  },
-  {
-    category: 'students',
-    q: "Which boards do you support?",
-    a: "Our tutors support students from CBSE, ICSE, ISC, State Boards, International School Curriculums, E-Techno Schools, and other recognized educational boards.",
-  },
-  {
-    category: 'students',
-    q: "Which subjects do you teach?",
-    a: "We provide support for Mathematics, Science, Physics, Chemistry, Biology, English, Hindi, Social Science, Computer Science, Commerce subjects, Humanities subjects, Coding, Artificial Intelligence, and many more.",
-  },
-  {
-    category: 'students',
-    q: "Do you provide tuition for board exam preparation?",
-    a: "Yes. We provide focused support for board exam preparation, revision planning, sample paper practice, doubt solving, and subject-specific guidance.",
-  },
-  {
-    category: 'students',
-    q: "Do you provide tutors for competitive foundation programs?",
-    a: "Yes. We also support students preparing for Olympiads, NTSE, scholarship exams, JEE Foundation, NEET Foundation, and other academic enrichment programs.",
-  },
-  {
-    category: 'students',
-    q: "Can I choose my preferred class timings?",
-    a: "Yes. We try to match students with tutors based on their preferred schedule and availability for a convenient learning experience.",
-  },
-  {
-    category: 'tutors',
     q: "How are tutors verified?",
     a: "Every tutor goes through a verification process that may include identity verification, qualification checks, teaching experience review, interviews, and subject knowledge evaluation.",
   },
   {
-    category: 'tutors',
+    q: "What if I am not satisfied with the tutor?",
+    a: "Your satisfaction is important to us. If the tutor is not the right fit for your child, our team will work with you to find a suitable replacement whenever possible.",
+  },
+  {
+    q: "Do you provide home tuition or online classes?",
+    a: "We provide both home tuition and online learning support. Parents can choose the option that best suits their child's learning needs and schedule.",
+  },
+  {
+    q: "Which classes do you cover?",
+    a: "We provide tutoring support from Play Group and Primary Classes to Class 12, including academic guidance for school studies, board exams, and foundation learning programs.",
+  },
+  {
+    q: "Which boards do you support?",
+    a: "Our tutors support students from CBSE, ICSE, ISC, State Boards, International School Curriculums, E-Techno Schools, and other recognized educational boards.",
+  },
+  {
+    q: "Which subjects do you teach?",
+    a: "We provide support for Mathematics, Science, Physics, Chemistry, Biology, English, Hindi, Social Science, Computer Science, Commerce subjects, Humanities subjects, Coding, Artificial Intelligence, and many more.",
+  },
+  {
+    q: "How much does home tuition cost?",
+    a: "Tuition fees vary depending on the student's class, subjects, location, tutor experience, and learning requirements. Our team shares complete fee details after understanding your needs.",
+  },
+  {
     q: "Can one tutor teach multiple subjects?",
     a: "Yes. Depending on the tutor's qualifications and expertise, many tutors can teach multiple subjects, especially for primary and middle school students.",
   },
   {
-    category: 'tutors',
+    q: "Do you provide tuition for board exam preparation?",
+    a: "Yes. We provide focused support for board exam preparation, revision planning, sample paper practice, doubt solving, and subject-specific guidance.",
+  },
+  {
+    q: "Can I choose my preferred class timings?",
+    a: "Yes. We try to match students with tutors based on their preferred schedule and availability for a convenient learning experience.",
+  },
+  {
+    q: "How do parents track student progress?",
+    a: "Regular feedback, performance discussions, and progress updates help parents stay informed about their child's learning journey and academic improvement.",
+  },
+  {
+    q: "Do you provide tutors for competitive foundation programs?",
+    a: "Yes. We also support students preparing for Olympiads, NTSE, scholarship exams, JEE Foundation, NEET Foundation, and other academic enrichment programs.",
+  },
+  {
     q: "How quickly can a tutor be assigned?",
     a: "The time required depends on the student's requirements and location. In many cases, we can begin the tutor matching process shortly after receiving the inquiry.",
   },
-  {
-    category: 'fees',
-    q: "How much does home tuition cost?",
-    a: "Tuition fees vary depending on the student's class, subjects, location, tutor experience, and learning requirements. Our team shares complete fee details after understanding your needs.",
-  },
 ];
 
-export default function FAQ() {
-  const [activeCategory, setActiveCategory] = useState('parents');
+export default function FAQFull() {
   const [openIndex, setOpenIndex] = useState(0);
-
-  const filteredFaqs = faqs.filter((f) => f.category === activeCategory);
-
-  const handleCategoryChange = (key) => {
-    setActiveCategory(key);
-    setOpenIndex(0); // open first question of the new category
-  };
 
   const scrollToContact = () => {
     const el = document.getElementById('contact');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = '/contact-us';
+    }
   };
 
   return (
@@ -121,81 +95,51 @@ export default function FAQ() {
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-wrap justify-center gap-2.5 mb-8">
-          {categories.map((cat) => {
-            const isActive = cat.key === activeCategory;
+        {/* Accordion — all questions, no categories */}
+        <div className="space-y-3">
+          {faqs.map((faq, idx) => {
+            const isOpen = openIndex === idx;
             return (
-              <button
-                key={cat.key}
-                onClick={() => handleCategoryChange(cat.key)}
-                className={`inline-flex items-center gap-2 font-heading font-semibold text-sm px-4 sm:px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
-                  isActive
-                    ? 'bg-primary-400 border-primary-400 text-white shadow-md shadow-primary-400/25'
-                    : 'bg-white border-primary-100 text-charcoal/80 hover:border-primary-300 hover:text-primary-500'
+              <div
+                key={idx}
+                className={`bg-white rounded-2xl border overflow-hidden text-left transition-all duration-300 hover:-translate-y-0.5 ${
+                  isOpen ? 'border-primary-300 shadow-lg shadow-primary-100/20' : 'border-primary-100/70 shadow-sm hover:shadow-md'
                 }`}
               >
-                <span className="text-base leading-none">{cat.emoji}</span>
-                <span>{cat.label}</span>
-              </button>
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : idx)}
+                  className="w-full px-5 sm:px-6 py-4 flex items-center justify-between gap-4 text-left focus:outline-none cursor-pointer"
+                >
+                  <span className={`font-heading font-bold text-base transition-colors ${isOpen ? 'text-primary-500' : 'text-charcoal'}`}>
+                    {faq.q}
+                  </span>
+                  <span
+                    className={`p-1.5 rounded-full shrink-0 transition-colors duration-300 ${
+                      isOpen ? 'bg-primary-400 text-white' : 'bg-primary-50 text-primary-400'
+                    }`}
+                  >
+                    {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  </span>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                    >
+                      <div className="px-5 sm:px-6 pb-5 pt-1 text-sm text-muted-grey leading-relaxed font-light">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
         </div>
-
-        {/* Accordion */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="space-y-3"
-          >
-            {filteredFaqs.map((faq, idx) => {
-              const isOpen = openIndex === idx;
-              return (
-                <div
-                  key={faq.q}
-                  className={`bg-white rounded-2xl border overflow-hidden text-left transition-all duration-300 hover:-translate-y-0.5 ${
-                    isOpen ? 'border-primary-300 shadow-lg shadow-primary-100/20' : 'border-primary-100/70 shadow-sm hover:shadow-md'
-                  }`}
-                >
-                  <button
-                    onClick={() => setOpenIndex(isOpen ? null : idx)}
-                    className="w-full px-5 sm:px-6 py-4 flex items-center justify-between gap-4 text-left focus:outline-none cursor-pointer"
-                  >
-                    <span className={`font-heading font-bold text-base transition-colors ${isOpen ? 'text-primary-500' : 'text-charcoal'}`}>
-                      {faq.q}
-                    </span>
-                    <span
-                      className={`p-1.5 rounded-full shrink-0 transition-colors duration-300 ${
-                        isOpen ? 'bg-primary-400 text-white' : 'bg-primary-50 text-primary-400'
-                      }`}
-                    >
-                      {isOpen ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                    </span>
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                      >
-                        <div className="px-5 sm:px-6 pb-5 pt-1 text-sm text-muted-grey leading-relaxed font-light">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
 
         {/* Still have questions — bottom */}
         <div className="mt-12 bg-white rounded-3xl border border-primary-100/60 shadow-lg shadow-primary-100/10 p-6 sm:p-8">
@@ -214,7 +158,7 @@ export default function FAQ() {
               </span>
               <span className="min-w-0">
                 <span className="block text-xs text-muted-grey">Call Us</span>
-                <span className="block font-heading font-bold text-sm text-charcoal group-hover:text-primary-500 transition-colors">+916398889697</span>
+                <span className="block font-heading font-bold text-sm text-charcoal group-hover:text-primary-500 transition-colors">6398889697</span>
               </span>
             </a>
 

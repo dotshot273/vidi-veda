@@ -3,10 +3,11 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import WhyChooseUs from '../components/WhyChooseUs';
-import Services from '../components/Services';
+import ServicesPreview from '../components/ServicesPreview';
 import Subjects from '../components/Subjects';
 import Cities from '../components/Cities';
 import HowItWorks from '../components/HowItWorks';
+import TutorVerification from '../components/TutorVerification';
 import StudentForm from '../components/StudentForm';
 import TutorForm from '../components/TutorForm';
 import Testimonials from '../components/Testimonials';
@@ -20,12 +21,13 @@ export default function Home() {
     <div className="min-h-screen bg-cream">
       <Navbar activePage="home" />
       <Hero />
+      <Cities />
       <About />
       <WhyChooseUs />
-      <Services />
+      <ServicesPreview />
       <Subjects />
-      <Cities />
       <HowItWorks />
+      <TutorVerification />
       
       {/* Forms Section wrapper with dual columns/tabs or stacked nicely */}
       <div className="bg-gradient-to-b from-white to-primary-50/10">

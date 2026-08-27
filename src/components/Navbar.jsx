@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, MessageCircle, Menu, X, BookOpen } from 'lucide-react';
+import { Phone, MessageCircle, Menu, X, BookOpen, ChevronDown } from 'lucide-react';
 
 export default function Navbar({ activePage = 'home' }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,16 +22,25 @@ export default function Navbar({ activePage = 'home' }) {
   const navLinks = [
     { name: 'Home', href: '/#home' },
     { name: 'About Us', href: '/#about' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Subjects', href: '/#subjects' },
-    { name: 'Cities', href: '/#cities' },
-    { name: 'How It Works', href: '/#how-it-works' },
-    { name: 'FAQs', href: '/#faq' },
-    { name: 'Contact', href: '/#contact' },
+    { name: 'Services', href: '/home-tuition-services' },
+    {
+      name: 'Learning',
+      children: [
+        { name: 'Classes', href: '/#subjects' },
+        { name: 'Boards', href: '/#subjects' },
+        { name: 'Subjects', href: '/#subjects' },
+      ],
+    },
+    { name: 'Why Vidi Veda', href: '/#why-choose-us' },
+    { name: 'Become a Tutor', href: '/#tutor-registration' },
+    { name: 'FAQs', href: '/frequently-asked-questions' },
+    { name: 'Contact', href: '/contact-us' },
   ];
 
   const handleLinkClick = (e, href) => {
     setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
+    setOpenMobileSubmenu(null);
     if (href.startsWith('/#')) {
       const targetId = href.split('#')[1];
       const element = document.getElementById(targetId);
@@ -67,16 +78,64 @@ export default function Navbar({ activePage = 'home' }) {
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className="text-[15px] font-medium text-charcoal/80 hover:text-primary-400 transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary-400 hover:after:w-full after:transition-all after:duration-300"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.children ? (
+                <div
+                  key={link.name}
+                  className="relative"
+                  onMouseEnter={() => setOpenDropdown(link.name)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={openDropdown === link.name}
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === link.name ? null : link.name)
+                    }
+                    className="flex items-center space-x-1 text-[15px] font-medium text-charcoal/80 hover:text-primary-400 transition-colors duration-200 py-1 focus:outline-none"
+                  >
+                    <span>{link.name}</span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        openDropdown === link.name ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Dropdown panel */}
+                  <div
+                    className={`absolute left-0 top-full pt-3 w-52 transition-all duration-200 origin-top ${
+                      openDropdown === link.name
+                        ? 'opacity-100 visible translate-y-0'
+                        : 'opacity-0 invisible -translate-y-1 pointer-events-none'
+                    }`}
+                  >
+                    <div className="bg-white rounded-xl shadow-xl border border-primary-100/50 py-2 overflow-hidden">
+                      {link.children.map((child) => (
+                        <a
+                          key={child.name}
+                          href={child.href}
+                          onClick={(e) => handleLinkClick(e, child.href)}
+                          className="block px-4 py-2.5 text-sm font-medium text-charcoal/80 hover:text-primary-400 hover:bg-primary-50/60 transition-colors duration-150"
+                        >
+                          {child.name}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleLinkClick(e, link.href)}
+                  className="text-[15px] font-medium text-charcoal/80 hover:text-primary-400 transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary-400 hover:after:w-full after:transition-all after:duration-300"
+                >
+                  {link.name}
+                </a>
+              )
+            )}
           </div>
 
           {/* Action CTAs */}
@@ -136,16 +195,56 @@ export default function Navbar({ activePage = 'home' }) {
         </div>
 
         <div className="flex flex-col space-y-4">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
-              className="text-base font-semibold text-charcoal/90 hover:text-primary-400 transition-colors py-2 border-b border-primary-50/50"
-            >
-              {link.name}
-            </a>
-          ))}
+          {navLinks.map((link) =>
+            link.children ? (
+              <div key={link.name} className="border-b border-primary-50/50">
+                <button
+                  type="button"
+                  aria-expanded={openMobileSubmenu === link.name}
+                  onClick={() =>
+                    setOpenMobileSubmenu(
+                      openMobileSubmenu === link.name ? null : link.name
+                    )
+                  }
+                  className="w-full flex items-center justify-between text-base font-semibold text-charcoal/90 hover:text-primary-400 transition-colors py-2 focus:outline-none"
+                >
+                  <span>{link.name}</span>
+                  <ChevronDown
+                    className={`h-5 w-5 transition-transform duration-200 ${
+                      openMobileSubmenu === link.name ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`overflow-hidden transition-all duration-300 ${
+                    openMobileSubmenu === link.name ? 'max-h-60 pb-2' : 'max-h-0'
+                  }`}
+                >
+                  <div className="flex flex-col pl-4 border-l-2 border-primary-100">
+                    {link.children.map((child) => (
+                      <a
+                        key={child.name}
+                        href={child.href}
+                        onClick={(e) => handleLinkClick(e, child.href)}
+                        className="text-sm font-medium text-charcoal/75 hover:text-primary-400 transition-colors py-2"
+                      >
+                        {child.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="text-base font-semibold text-charcoal/90 hover:text-primary-400 transition-colors py-2 border-b border-primary-50/50"
+              >
+                {link.name}
+              </a>
+            )
+          )}
           
           <div className="pt-6 flex flex-col space-y-3">
             <a

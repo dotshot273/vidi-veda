@@ -1,13 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Phone, MessageCircle, CheckCircle, ArrowRight, ShieldCheck, UserCheck, Laptop, MapPin } from 'lucide-react';
+import { Phone, MessageCircle, CheckCircle, ArrowRight, ShieldCheck, UserCheck, Laptop, MapPin, Clock, BookOpen, GraduationCap, Pencil } from 'lucide-react';
 
 export default function Hero({ 
-  heading = "Find Trusted Home Tutors for CBSE & ICSE Students Across India",
-  subheading = "Personal home tuition and online classes with experienced tutors, one-to-one attention and better learning support for students.",
-  ctaRegisterText = "Register Student",
-  ctaTutorText = "Become a Tutor"
+  heading = "Helping Students Learn Better with Trusted Tutors & Personal Attention",
+  subheading = "Every child learns differently. At Vidi Veda, we connect students with experienced home tutors who provide personal attention, clear guidance, and a comfortable learning environment. Whether your child needs help with daily studies, exam preparation, or building confidence in a subject, we are here to support their learning journey.",
+  ctaPrimaryText = "Book a Free Demo Class",
+  ctaSecondaryText = "Talk to Our Team"
 }) {
+
+  const trustHighlights = [
+    { icon: UserCheck, label: "Verified Tutors" },
+    { icon: CheckCircle, label: "One-to-One Learning Support" },
+    { icon: Laptop, label: "Home & Online Tuition Available" },
+    { icon: BookOpen, label: "CBSE & ICSE Subject Experts" },
+    { icon: Clock, label: "Flexible Class Timings" },
+    { icon: MapPin, label: "Available Across India" },
+  ];
   
   const handleScroll = (id) => {
     const element = document.getElementById(id);
@@ -38,9 +47,20 @@ export default function Hero({
 
   return (
     <section id="home" className="relative min-h-screen pt-28 pb-16 flex items-center overflow-hidden bg-gradient-to-b from-primary-50 via-cream to-white">
-      {/* Background blobs for premium feel */}
+      {/* Soft light-orange gradient glow */}
       <div className="absolute top-10 right-[-10%] w-[500px] h-[500px] rounded-full bg-primary-100/40 blur-3xl -z-10 animate-pulse-soft" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary-200/20 blur-3xl -z-10" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full bg-gradient-to-r from-primary-100/20 via-primary-200/15 to-transparent blur-3xl -z-10" />
+
+      {/* Soft floating shapes */}
+      <div className="absolute top-24 left-[8%] w-16 h-16 rounded-2xl bg-primary-200/25 -z-10 animate-float-slow" />
+      <div className="absolute bottom-24 right-[12%] w-10 h-10 rounded-full bg-primary-300/25 -z-10 animate-drift" style={{ animationDelay: '1.5s' }} />
+      <div className="absolute top-1/2 left-[4%] w-6 h-6 rounded-full bg-emerald-300/30 -z-10 animate-float" style={{ animationDelay: '2s' }} />
+
+      {/* Animated education icons */}
+      <BookOpen className="absolute top-28 right-[18%] h-9 w-9 text-primary-300/50 -z-10 animate-float-slow" />
+      <Pencil className="absolute bottom-32 left-[14%] h-8 w-8 text-primary-400/45 -z-10 animate-drift" style={{ animationDelay: '0.8s' }} />
+      <GraduationCap className="absolute top-1/2 right-[6%] h-10 w-10 text-primary-300/45 -z-10 animate-float" style={{ animationDelay: '1.2s' }} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -52,22 +72,23 @@ export default function Hero({
             initial="hidden"
             animate="visible"
           >
-            {/* Tagline */}
+            {/* Badge */}
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center space-x-2 bg-primary-100/70 border border-primary-200/50 px-3.5 py-1.5 rounded-full text-xs font-bold text-primary-700 uppercase tracking-wider"
+              className="inline-flex items-center space-x-2 bg-primary-100/70 border border-primary-200/50 px-3.5 py-1.5 rounded-full text-xs font-bold text-primary-700 tracking-wide"
             >
               <ShieldCheck className="h-4 w-4 text-primary-500 shrink-0" />
-              <span>100% Background Verified Home Tutors</span>
+              <span>Trusted Home Tutors | CBSE &amp; ICSE | Online &amp; Home Tuition Across India</span>
             </motion.div>
 
             {/* Main Heading */}
             <motion.h1 
               variants={itemVariants}
-              className="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl text-charcoal leading-tight"
+              className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-charcoal leading-tight"
             >
               {heading.split(" ").map((word, idx) => {
-                if (word.toLowerCase() === "cbse" || word.toLowerCase() === "icse" || word.toLowerCase() === "tutors" || word.toLowerCase() === "trusted") {
+                const clean = word.toLowerCase().replace(/[^a-z]/g, "");
+                if (["trusted", "tutors", "personal", "attention", "better"].includes(clean)) {
                   return <span key={idx} className="text-primary-400">{word} </span>;
                 }
                 return word + " ";
@@ -77,7 +98,7 @@ export default function Hero({
             {/* Subtitle */}
             <motion.p 
               variants={itemVariants}
-              className="text-lg text-muted-grey leading-relaxed max-w-xl font-light"
+              className="text-base text-muted-grey leading-relaxed max-w-2xl font-light"
             >
               {subheading}
             </motion.p>
@@ -85,32 +106,16 @@ export default function Hero({
             {/* Key Trust Highlights */}
             <motion.div 
               variants={itemVariants}
-              className="grid grid-cols-2 gap-4 max-w-lg pt-2"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 max-w-xl pt-2"
             >
-              <div className="flex items-center space-x-2 text-charcoal/80">
-                <div className="bg-primary-100 text-primary-600 p-1 rounded-full shrink-0">
-                  <UserCheck className="h-4 w-4" />
+              {trustHighlights.map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center space-x-2 text-charcoal/80">
+                  <div className="bg-primary-100 text-primary-600 p-1 rounded-full shrink-0">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium">{label}</span>
                 </div>
-                <span className="text-sm font-medium">Verified Tutors</span>
-              </div>
-              <div className="flex items-center space-x-2 text-charcoal/80">
-                <div className="bg-primary-100 text-primary-600 p-1 rounded-full shrink-0">
-                  <CheckCircle className="h-4 w-4" />
-                </div>
-                <span className="text-sm font-medium">1-to-1 Attention</span>
-              </div>
-              <div className="flex items-center space-x-2 text-charcoal/80">
-                <div className="bg-primary-100 text-primary-600 p-1 rounded-full shrink-0">
-                  <Laptop className="h-4 w-4" />
-                </div>
-                <span className="text-sm font-medium">Online & Offline Options</span>
-              </div>
-              <div className="flex items-center space-x-2 text-charcoal/80">
-                <div className="bg-primary-100 text-primary-600 p-1 rounded-full shrink-0">
-                  <MapPin className="h-4 w-4" />
-                </div>
-                <span className="text-sm font-medium">Available Across India</span>
-              </div>
+              ))}
             </motion.div>
 
             {/* CTA Buttons */}
@@ -122,17 +127,25 @@ export default function Hero({
                 onClick={() => handleScroll('student-registration')}
                 className="bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold px-8 py-3.5 rounded-full transition-all duration-300 shadow-lg shadow-primary-400/25 hover:shadow-xl hover:shadow-primary-400/30 hover:-translate-y-0.5 flex items-center space-x-2 group cursor-pointer"
               >
-                <span>{ctaRegisterText}</span>
+                <span>{ctaPrimaryText}</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
-                onClick={() => handleScroll('tutor-registration')}
+                onClick={() => handleScroll('contact')}
                 className="bg-transparent hover:bg-primary-100/40 text-primary-400 hover:text-primary-600 border-2 border-primary-400 font-heading font-semibold px-8 py-3 rounded-full transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
               >
-                {ctaTutorText}
+                {ctaSecondaryText}
               </button>
             </motion.div>
+
+            {/* Small Trust Statement */}
+            <motion.p 
+              variants={itemVariants}
+              className="text-sm text-muted-grey/90 italic max-w-xl"
+            >
+              Trusted by parents who want personal attention, better understanding, and a positive learning experience for their children.
+            </motion.p>
 
             {/* Secondary Contact Channels */}
             <motion.div 

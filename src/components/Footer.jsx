@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="bg-charcoal text-white pt-16 pb-8 border-t-4 border-primary-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           {/* Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
@@ -49,79 +49,88 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Student Links */}
           <div>
-            <h4 className="font-heading font-bold text-lg mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
-              Quick Links
+            <h4 className="font-heading font-bold text-lg text-white mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
+              Student Links
             </h4>
             <ul className="space-y-3 text-sm text-white/75">
               <li>
-                <a href="#home" onClick={(e) => handleLinkClick(e, 'home')} className="hover:text-primary-400 hover:underline transition duration-200">
-                  Home
+                <a href="#student-registration" onClick={(e) => handleLinkClick(e, 'student-registration')} className="text-[#FFCBA8] hover:text-primary-400 hover:underline transition duration-200">
+                  Register as a Student
                 </a>
               </li>
               <li>
-                <a href="#about" onClick={(e) => handleLinkClick(e, 'about')} className="hover:text-primary-400 hover:underline transition duration-200">
-                  About Vidi Veda
+                <a href="/home-tuition-services" className="hover:text-primary-400 hover:underline transition duration-200">
+                  Home Tuition
                 </a>
               </li>
               <li>
-                <a href="#services" onClick={(e) => handleLinkClick(e, 'services')} className="hover:text-primary-400 hover:underline transition duration-200">
-                  Our Services
+                <a href="/home-tuition-services" className="hover:text-primary-400 hover:underline transition duration-200">
+                  Online Tuition
                 </a>
               </li>
               <li>
-                <a href="#student-registration" onClick={(e) => handleLinkClick(e, 'student-registration')} className="hover:text-primary-400 hover:underline transition duration-200 font-medium text-primary-200">
-                  Register as Student
+                <a href="#student-registration" onClick={(e) => handleLinkClick(e, 'student-registration')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  Demo Class
                 </a>
               </li>
               <li>
-                <a href="#tutor-registration" onClick={(e) => handleLinkClick(e, 'tutor-registration')} className="hover:text-primary-400 hover:underline transition duration-200 font-medium text-primary-200">
-                  Become a Tutor
-                </a>
-              </li>
-              <li>
-                <a href="#faq" onClick={(e) => handleLinkClick(e, 'faq')} className="hover:text-primary-400 hover:underline transition duration-200">
-                  FAQs
+                <a href="#subjects" onClick={(e) => handleLinkClick(e, 'subjects')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  Subjects
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Services Links */}
+          {/* Tutor Links */}
           <div>
-            <h4 className="font-heading font-bold text-lg mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
-              Our Tuitions
+            <h4 className="font-heading font-bold text-lg text-white mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
+              Tutor Links
             </h4>
             <ul className="space-y-3 text-sm text-white/75">
               <li>
-                <a href="/cbse-tuition-classes" className="hover:text-primary-400 hover:underline transition duration-200">
-                  CBSE Tuition Classes
+                <a href="#tutor-registration" onClick={(e) => handleLinkClick(e, 'tutor-registration')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  Become a Tutor
                 </a>
               </li>
               <li>
-                <a href="/icse-home-tutors" className="hover:text-primary-400 hover:underline transition duration-200">
-                  ICSE Home Tutors
+                <a href="#tutor-registration" onClick={(e) => handleLinkClick(e, 'tutor-registration')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  Tutor Guidelines
                 </a>
               </li>
               <li>
-                <a href="/tutors-in-bareilly" className="hover:text-primary-400 hover:underline transition duration-200">
-                  Home Tutors in Bareilly
+                <a href="#faq" onClick={(e) => handleLinkClick(e, 'faq')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  Tutor FAQ
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="font-heading font-bold text-lg text-white mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
+              Company Links
+            </h4>
+            <ul className="space-y-3 text-sm text-white/75">
+              <li>
+                <a href="#about" onClick={(e) => handleLinkClick(e, 'about')} className="hover:text-primary-400 hover:underline transition duration-200">
+                  About
                 </a>
               </li>
               <li>
-                <a href="/tutors-in-meerut" className="hover:text-primary-400 hover:underline transition duration-200">
-                  Home Tutors in Meerut
+                <a href="/contact-us" className="hover:text-primary-400 hover:underline transition duration-200">
+                  Contact
                 </a>
               </li>
               <li>
-                <a href="/maths-tutor" className="hover:text-primary-400 hover:underline transition duration-200">
-                  Mathematics Tutors
+                <a href="/privacy-policy" className="hover:text-primary-400 hover:underline transition duration-200">
+                  Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="/science-tuition" className="hover:text-primary-400 hover:underline transition duration-200">
-                  Science Tuition
+                <a href="/terms" className="hover:text-primary-400 hover:underline transition duration-200">
+                  Terms
                 </a>
               </li>
             </ul>
@@ -129,7 +138,7 @@ export default function Footer() {
 
           {/* Contact Details */}
           <div>
-            <h4 className="font-heading font-bold text-lg mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
+            <h4 className="font-heading font-bold text-lg text-white mb-6 relative after:absolute after:bottom-[-8px] after:left-0 after:w-12 after:h-0.5 after:bg-primary-400">
               Get in Touch
             </h4>
             <ul className="space-y-4 text-sm text-white/75">
@@ -149,8 +158,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary-400 shrink-0" />
-                <a href="mailto:info@vidiveda.com" className="hover:text-primary-400 transition-colors">
-                  info@vidiveda.com
+                <a href="mailto:support.vidiveda@gmail.com" className="hover:text-primary-400 transition-colors">
+                  support.vidiveda@gmail.com
                 </a>
               </li>
             </ul>

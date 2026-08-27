@@ -1,13 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Users, GraduationCap, Building2, Smile } from 'lucide-react';
+import { Users, GraduationCap, Building2, Smile, HeartHandshake } from 'lucide-react';
+
+// Animated count-up number that triggers when scrolled into view
+function CountUp({ value, duration = 2000 }) {
+  const [display, setDisplay] = useState("0");
+  const ref = useRef(null);
+  const started = useRef(false);
+
+  // Parse numeric portion + suffix/prefix (e.g. "2000+", "98%")
+  const match = String(value).match(/^(\D*)(\d+)(\D*)$/);
+  const prefix = match ? match[1] : "";
+  const target = match ? parseInt(match[2], 10) : 0;
+  const suffix = match ? match[3] : String(value);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !started.current) {
+            started.current = true;
+            const start = performance.now();
+            const tick = (now) => {
+              const progress = Math.min((now - start) / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+              setDisplay(String(Math.round(eased * target)));
+              if (progress < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  return (
+    <span ref={ref}>
+      {prefix}{display}{suffix}
+    </span>
+  );
+}
 
 export default function About() {
   const stats = [
-    { icon: <Users className="h-6 w-6" />, count: "500+", label: "Happy Parents" },
-    { icon: <GraduationCap className="h-6 w-6" />, count: "200+", label: "Verified Tutors" },
-    { icon: <Building2 className="h-6 w-6" />, count: "9+", label: "Cities Covered" },
-    { icon: <Smile className="h-6 w-6" />, count: "98%", label: "Satisfaction Rate" },
+    {
+      icon: <Users className="h-6 w-6" />,
+      count: "2000+",
+      label: "Happy Parents",
+      description: "Families who trust Vidi Veda for quality learning support and personal attention.",
+    },
+    {
+      icon: <GraduationCap className="h-6 w-6" />,
+      count: "1000+",
+      label: "Verified Tutors",
+      description: "Experienced tutors helping students learn, grow, and achieve their goals.",
+    },
+    {
+      icon: <Building2 className="h-6 w-6" />,
+      count: "10+",
+      label: "Cities Covered",
+      description: "Expanding our tutor network to support students in multiple cities across India.",
+    },
+    {
+      icon: <Smile className="h-6 w-6" />,
+      count: "98%",
+      label: "Satisfaction Rate",
+      description: "Positive learning experiences shared by students and parents.",
+    },
   ];
 
   return (
@@ -48,44 +114,86 @@ export default function About() {
             <div className="space-y-2">
               <span className="text-primary-400 font-heading font-extrabold text-sm uppercase tracking-widest block">About Vidi Veda</span>
               <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-charcoal leading-tight">
-                Empowering Students in Tier 2 & Tier 3 Cities Across India
+                Helping Students Learn with Confidence Through Personal Attention and Quality Guidance
               </h2>
             </div>
             
             <p className="text-muted-grey text-base leading-relaxed font-light">
-              Quality personal education shouldn't be a privilege reserved only for metro cities. At <strong>Vidi Veda</strong>, headquartered in Bareilly, Uttar Pradesh, our mission is to bring high-quality, trusted, and empathetic one-to-one home tutoring right to the doorsteps of families in tier 2 and tier 3 cities.
+              At <strong>Vidi Veda</strong>, we believe every student deserves the right guidance to learn, grow, and succeed. We connect students and parents with trusted, experienced tutors who provide personalized learning support based on each student's needs and learning style.
             </p>
             
             <p className="text-muted-grey text-base leading-relaxed font-light">
-              We connect parents with highly competent, verified local school teachers and private tutors who understand the school curriculum (CBSE & ICSE). By emphasizing personalized learning plans and positive reinforcement, we help students overcome academic fear, build core conceptual understanding, and achieve their full potential.
+              Whether it's daily studies, exam preparation, homework support, concept building, or improving confidence in a subject, our tutors are here to help. We support students from CBSE, ICSE, State Boards, and other academic backgrounds across India.
             </p>
 
-            {/* Stat Counters with Soft Reveal */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t border-primary-100">
-              {stats.map((stat, index) => (
-                <div key={index} className="space-y-1">
-                  <div className="inline-flex text-primary-400 p-2 bg-primary-50 rounded-lg">
-                    {stat.icon}
-                  </div>
-                  <h3 className="font-heading font-extrabold text-2xl text-charcoal leading-none">
-                    {stat.count}
-                  </h3>
-                  <p className="text-xs text-muted-grey font-medium uppercase tracking-wider leading-none">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <p className="text-muted-grey text-base leading-relaxed font-light">
+              Our goal is simple — to make quality education more accessible, personalized, and effective while helping students build confidence and achieve their full potential.
+            </p>
 
-            {/* Heartfelt Callout Box */}
-            <div className="bg-primary-50/50 border-l-4 border-primary-400 p-4 rounded-r-xl">
-              <p className="text-sm font-medium text-charcoal/90 italic leading-relaxed">
-                "Every child learns differently. We believe that with one-to-one attention, patient explanation, and continuous mentoring, every student in India can discover the joy of learning."
+            {/* Trust Statement */}
+            <div className="bg-primary-50/50 border-l-4 border-primary-400 p-4 rounded-r-xl flex items-start space-x-3">
+              <HeartHandshake className="h-5 w-5 text-primary-400 shrink-0 mt-0.5" />
+              <p className="text-sm font-medium text-charcoal/90 leading-relaxed">
+                Supporting students, empowering parents, and connecting families with trusted tutors across India.
               </p>
             </div>
           </motion.div>
           
         </div>
+      </div>
+
+      {/* Trust & Impact Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+        <motion.div
+          className="text-center max-w-2xl mx-auto mb-14 space-y-3"
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="text-primary-400 font-heading font-extrabold text-sm uppercase tracking-widest block">Our Growing Learning Community</span>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-charcoal leading-tight">
+            Trusted by Students and Parents Across India
+          </h2>
+          <div className="w-16 h-1 bg-primary-400 mx-auto rounded-full" />
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              className="bg-white border border-primary-100/50 rounded-2xl p-6 text-center shadow-lg shadow-primary-100/10 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="inline-flex text-primary-400 p-3 bg-primary-50 rounded-xl mb-4">
+                {stat.icon}
+              </div>
+              <h3 className="font-heading font-extrabold text-4xl text-charcoal leading-none">
+                <CountUp value={stat.count} />
+              </h3>
+              <p className="text-sm text-primary-500 font-bold uppercase tracking-wider mt-2 mb-3">
+                {stat.label}
+              </p>
+              <p className="text-xs text-muted-grey leading-relaxed font-light">
+                {stat.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom Trust Statement */}
+        <motion.p
+          className="text-center text-muted-grey text-base font-light italic mt-12 max-w-2xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Building trusted learning connections between students, parents, and tutors every day.
+        </motion.p>
       </div>
     </section>
   );

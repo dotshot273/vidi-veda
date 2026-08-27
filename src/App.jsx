@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
 import SeoCityPage from './pages/SeoCityPage';
+import ServicesPage from './pages/ServicesPage';
+import ContactPage from './pages/ContactPage';
+import FAQPage from './pages/FAQPage';
 
 export default function App() {
   return (
@@ -12,6 +15,15 @@ export default function App() {
       <Routes>
         {/* Main Homepage */}
         <Route path="/" element={<Home />} />
+
+        {/* Services Page */}
+        <Route path="/home-tuition-services" element={<ServicesPage />} />
+
+        {/* Contact Page */}
+        <Route path="/contact-us" element={<ContactPage />} />
+
+        {/* FAQ Page */}
+        <Route path="/frequently-asked-questions" element={<FAQPage />} />
         
         {/* Secure Admin Dashboard */}
         <Route path="/admin" element={<AdminDashboard />} />
