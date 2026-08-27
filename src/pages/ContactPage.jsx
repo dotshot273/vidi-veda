@@ -15,6 +15,7 @@ export default function ContactPage() {
       <Navbar activePage="contact" />
       {/* Spacer so the fixed navbar doesn't overlap the section */}
       <div className="pt-24" />
+      <h1 className="sr-only">Contact Vidi Veda Home Tutoring</h1>
       <Contact />
       <OfficeLocation />
       <Footer />

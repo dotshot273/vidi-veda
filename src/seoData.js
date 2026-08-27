@@ -13,6 +13,21 @@ export const seoData = {
     subject: "All Subjects",
     board: "CBSE & ICSE"
   },
+  "/home-tuition-services": {
+    title: "Home & Online Tuition Services | Vidi Veda Home Tutoring",
+    description: "Explore Vidi Veda's tutoring services: home tuition, online classes, group learning, exam preparation, homework support, and subject-specific tuition for CBSE, ICSE & State Boards.",
+    keywords: "home tuition services, online tuition, group tuition, exam preparation, homework help, subject-specific tuition, CBSE ICSE tutoring"
+  },
+  "/contact-us": {
+    title: "Contact Us | Vidi Veda Home Tutoring",
+    description: "Get in touch with Vidi Veda for home and online tuition. Call +91 63988 89697, chat on WhatsApp, or send us a message. Parent support Mon-Sat, 9 AM - 8 PM.",
+    keywords: "contact Vidi Veda, home tuition enquiry, book a demo class, tutor helpline, home tuition contact"
+  },
+  "/frequently-asked-questions": {
+    title: "Frequently Asked Questions | Vidi Veda Home Tutoring",
+    description: "Answers to common questions about finding the right tutor, booking a demo class, fees, tutor verification, boards and subjects covered, and learning support at Vidi Veda.",
+    keywords: "home tuition FAQ, tutor questions, demo class, tuition fees, tutor verification, Vidi Veda FAQ"
+  },
   "/tutors-in-bareilly": {
     title: "Best Home Tutors in Bareilly | CBSE & ICSE Tuition - Vidi Veda",
     description: "Looking for qualified home tutors in Bareilly? Vidi Veda provides verified school teachers and personal home tuition for CBSE & ICSE classes. Book a free demo class today!",

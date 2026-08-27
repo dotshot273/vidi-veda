@@ -15,6 +15,7 @@ export default function ServicesPage() {
       <Navbar activePage="services" />
       {/* Spacer so the fixed navbar doesn't overlap the section */}
       <div className="pt-24" />
+      <h1 className="sr-only">Home &amp; Online Tuition Services by Vidi Veda</h1>
       <Services />
       <ServiceFormatGuide />
       <Footer />
