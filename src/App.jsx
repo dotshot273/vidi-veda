@@ -25,8 +25,11 @@ export default function App() {
         {/* FAQ Page */}
         <Route path="/frequently-asked-questions" element={<FAQPage />} />
         
-        {/* Secure Admin Dashboard */}
+        {/* Admin dashboard — /dashboard is a fallback if /admin is blocked by the host */}
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/" element={<AdminDashboard />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard/" element={<AdminDashboard />} />
         
         {/* Dynamic SEO Landing Pages */}
         <Route path="/tutors-in-bareilly" element={<SeoCityPage />} />

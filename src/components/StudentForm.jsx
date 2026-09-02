@@ -148,32 +148,38 @@ export default function StudentForm() {
     setLoading(true);
     setError(null);
 
-    const payload = {
-      parent_name: parentName,
-      mobile_number: mobileNumber,
-      whatsapp_number: whatsappNumber,
-      address: address,
-      city: city === "Other" ? customCity : city,
-      children: children.map(c => ({
-        student_name: c.studentName,
-        student_class: c.studentClass,
-        board: c.board,
-        subjects: c.subjects.join(', '),
-        tuition_type: c.tuitionType,
-        preferred_timing: c.preferredTiming
-      }))
-    };
+    const body = new URLSearchParams();
+    body.set('parent_name', parentName);
+    body.set('mobile_number', mobileNumber);
+    body.set('whatsapp_number', whatsappNumber);
+    body.set('address', address);
+    body.set('city', city === "Other" ? customCity : city);
+    children.forEach((c, i) => {
+      body.set(`children[${i}][student_name]`, c.studentName);
+      body.set(`children[${i}][student_class]`, c.studentClass);
+      body.set(`children[${i}][board]`, c.board);
+      body.set(`children[${i}][subjects]`, c.subjects.join(', '));
+      body.set(`children[${i}][tuition_type]`, c.tuitionType);
+      body.set(`children[${i}][preferred_timing]`, c.preferredTiming);
+    });
 
     try {
       const response = await fetch('/api/api.php?action=register_student', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
-        body: JSON.stringify(payload),
+        body: body.toString(),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        setError('Registration server returned an unexpected response. Please try again.');
+        return;
+      }
       if (data.success) {
         setSuccessData(data);
       } else {

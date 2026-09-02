@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, LogOut, Search, Download, Check, X, ExternalLink, Users, GraduationCap, Mail, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { Lock, LogOut, Search, Download, Check, X, ExternalLink, Users, GraduationCap, Mail, RefreshCw, ChevronDown, ChevronUp, Calendar, BookOpen } from 'lucide-react';
+import AssignmentBoard from '../components/AssignmentBoard';
 
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,11 +14,20 @@ export default function AdminDashboard() {
   const [students, setStudents] = useState([]);
   const [tutors, setTutors] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [assignmentRefresh, setAssignmentRefresh] = useState(0);
   
   const [dataLoading, setDataLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCity, setFilterCity] = useState('');
   const [expandedStudentId, setExpandedStudentId] = useState(null);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSaving, setPasswordSaving] = useState(false);
 
   // Auth token
   const [token, setToken] = useState(localStorage.getItem('vv_admin_token') || '');
@@ -25,7 +35,11 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (token) {
       setIsLoggedIn(true);
-      fetchData();
+      if (activeTab === 'demos' || activeTab === 'coaching') {
+        fetchLookups();
+      } else {
+        fetchData();
+      }
     }
   }, [token, activeTab]);
 
@@ -39,7 +53,7 @@ export default function AdminDashboard() {
     setAuthError('');
 
     try {
-      const response = await fetch('/api/admin.php?action=login', {
+      const response = await fetch('/api/panel.php?action=login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -67,15 +81,37 @@ export default function AdminDashboard() {
     setStudents([]);
     setTutors([]);
     setContacts([]);
+    setAssignments([]);
+  };
+
+  const authHeaders = () => ({ Authorization: `Bearer ${token}` });
+
+  const fetchLookups = async () => {
+    try {
+      const [stuRes, tutRes] = await Promise.all([
+        fetch('/api/panel.php?action=get_students', { headers: authHeaders() }),
+        fetch('/api/panel.php?action=get_tutors', { headers: authHeaders() }),
+      ]);
+      if (stuRes.status === 401 || tutRes.status === 401) {
+        handleLogout();
+        return;
+      }
+      const stuData = await stuRes.json();
+      const tutData = await tutRes.json();
+      if (stuData.success) setStudents(stuData.data || []);
+      if (tutData.success) setTutors(tutData.data || []);
+    } catch (err) {
+      console.error('Error fetching mapping lookups:', err);
+    }
   };
 
   const fetchData = async () => {
     setDataLoading(true);
     try {
       let endpoint = '';
-      if (activeTab === 'students') endpoint = '/api/admin.php?action=get_students';
-      else if (activeTab === 'tutors') endpoint = '/api/admin.php?action=get_tutors';
-      else if (activeTab === 'contacts') endpoint = '/api/admin.php?action=get_contacts';
+      if (activeTab === 'students') endpoint = '/api/panel.php?action=get_students';
+      else if (activeTab === 'tutors') endpoint = '/api/panel.php?action=get_tutors';
+      else if (activeTab === 'contacts') endpoint = '/api/panel.php?action=get_contacts';
 
       const response = await fetch(endpoint, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -101,7 +137,7 @@ export default function AdminDashboard() {
 
   const handleUpdateTutorStatus = async (tutorId, nextStatus) => {
     try {
-      const response = await fetch('/api/admin.php?action=update_tutor_status', {
+      const response = await fetch('/api/panel.php?action=update_tutor_status', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -118,6 +154,55 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       alert('Network error while updating tutor status.');
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordMessage('');
+    if (!currentPassword || !newPassword) {
+      setPasswordError('Fill current and new password.');
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError('New password must be at least 8 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New password and confirmation do not match.');
+      return;
+    }
+    setPasswordSaving(true);
+    try {
+      const response = await fetch('/api/panel.php?action=change_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          current_password: currentPassword,
+          new_password: newPassword,
+        }),
+      });
+      if (response.status === 401) {
+        handleLogout();
+        return;
+      }
+      const data = await response.json();
+      if (data.success) {
+        setPasswordMessage('Password updated and saved in the database.');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setPasswordError(data.message || 'Could not update password.');
+      }
+    } catch {
+      setPasswordError('Could not update password.');
+    } finally {
+      setPasswordSaving(false);
     }
   };
 
@@ -161,6 +246,23 @@ export default function AdminDashboard() {
         `"${t.preferred_areas.replace(/"/g, '""')}"`,
         t.status,
         t.created_at
+      ]);
+    } else if (activeTab === 'demos' || activeTab === 'coaching') {
+      filename = activeTab === 'demos' ? 'VidiVeda_Active_Demos.csv' : 'VidiVeda_Active_Coaching.csv';
+      headers = ['ID', 'Student', 'Class', 'Parent', 'Parent Mobile', 'Teacher', 'Teacher Mobile', 'Address', 'Amount', 'Active From', 'Status', 'Notes'];
+      rows = assignments.map((a) => [
+        a.id,
+        a.student_name,
+        a.student_class,
+        a.parent_name,
+        a.parent_mobile,
+        a.tutor_name,
+        a.tutor_mobile,
+        `"${String(a.address || '').replace(/"/g, '""')}"`,
+        a.amount,
+        a.started_at,
+        a.status,
+        `"${String(a.notes || '').replace(/"/g, '""')}"`
       ]);
     } else {
       filename = 'VidiVeda_Contacts_Export.csv';
@@ -284,21 +386,80 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 font-semibold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Logout</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => {
+                setShowPasswordForm((open) => !open);
+                setPasswordError('');
+                setPasswordMessage('');
+              }}
+              className="flex items-center space-x-1.5 bg-white hover:bg-primary-50 border border-primary-100 text-charcoal font-semibold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer"
+            >
+              <Lock className="h-4 w-4" />
+              <span>Change Password</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 font-semibold text-xs px-4 py-2.5 rounded-xl transition cursor-pointer"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </header>
+
+      {showPasswordForm && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <form onSubmit={handleChangePassword} className="bg-white border border-primary-100 rounded-2xl p-5 shadow-sm grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-charcoal">Current password</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full bg-cream/20 border border-primary-100 focus:border-primary-400 focus:outline-none rounded-xl px-3 py-2.5 text-xs"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-charcoal">New password</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full bg-cream/20 border border-primary-100 focus:border-primary-400 focus:outline-none rounded-xl px-3 py-2.5 text-xs"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-charcoal">Confirm new password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full bg-cream/20 border border-primary-100 focus:border-primary-400 focus:outline-none rounded-xl px-3 py-2.5 text-xs"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={passwordSaving}
+              className="bg-primary-400 hover:bg-primary-500 text-white font-heading font-semibold text-xs px-4 py-2.5 rounded-xl cursor-pointer disabled:opacity-50"
+            >
+              {passwordSaving ? 'Saving...' : 'Save to Database'}
+            </button>
+            {(passwordError || passwordMessage) && (
+              <div className={`sm:col-span-4 text-xs font-semibold ${passwordError ? 'text-red-600' : 'text-emerald-600'}`}>
+                {passwordError || passwordMessage}
+              </div>
+            )}
+          </form>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         
         {/* Navigation Tabs */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-primary-100/50 pb-4">
-          <div className="flex space-x-2 bg-white p-1 rounded-xl border border-primary-100/50 w-max shadow-sm">
+          <div className="flex flex-wrap gap-1 bg-white p-1 rounded-xl border border-primary-100/50 w-max shadow-sm">
             <button
               onClick={() => { setActiveTab('students'); setSearchQuery(''); setFilterCity(''); }}
               className={`flex items-center space-x-1.5 px-5 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
@@ -328,12 +489,39 @@ export default function AdminDashboard() {
               <Mail className="h-4 w-4" />
               <span>Inquiries ({contacts.length})</span>
             </button>
+
+            <button
+              onClick={() => { setActiveTab('demos'); setSearchQuery(''); setFilterCity(''); }}
+              className={`flex items-center space-x-1.5 px-5 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'demos' ? 'bg-primary-400 text-white shadow-md' : 'text-charcoal/80 hover:bg-primary-50/30'
+              }`}
+            >
+              <Calendar className="h-4 w-4" />
+              <span>Active Demos</span>
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('coaching'); setSearchQuery(''); setFilterCity(''); }}
+              className={`flex items-center space-x-1.5 px-5 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'coaching' ? 'bg-primary-400 text-white shadow-md' : 'text-charcoal/80 hover:bg-primary-50/30'
+              }`}
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>Active Coaching</span>
+            </button>
           </div>
 
           {/* Table Actions (Refresh & Export) */}
           <div className="flex space-x-2.5">
             <button
-              onClick={fetchData}
+              onClick={() => {
+                if (activeTab === 'demos' || activeTab === 'coaching') {
+                  fetchLookups();
+                  setAssignmentRefresh((n) => n + 1);
+                } else {
+                  fetchData();
+                }
+              }}
               disabled={dataLoading}
               className="bg-white border border-primary-100 hover:bg-primary-50 p-2.5 rounded-xl transition cursor-pointer shadow-sm text-charcoal/70"
               title="Refresh Data"
@@ -360,7 +548,9 @@ export default function AdminDashboard() {
               type="text"
               placeholder={
                 activeTab === 'students' ? 'Search by Parent name, ID, mobile, or city...' :
-                activeTab === 'tutors' ? 'Search by Tutor name, ID, qualification, location...' : 'Search inquiries...'
+                activeTab === 'tutors' ? 'Search by Tutor name, ID, qualification, location...' :
+                activeTab === 'demos' || activeTab === 'coaching' ? 'Search by student, teacher, address, or amount...' :
+                'Search inquiries...'
               }
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -389,7 +579,19 @@ export default function AdminDashboard() {
         {/* Data Grid container */}
         <div className="bg-white rounded-2xl border border-primary-100/50 shadow-sm overflow-hidden">
           
-          {dataLoading ? (
+          {activeTab === 'demos' || activeTab === 'coaching' ? (
+            <AssignmentBoard
+              key={`${activeTab}-${assignmentRefresh}`}
+              token={token}
+              type={activeTab === 'demos' ? 'demo' : 'coaching'}
+              students={students}
+              tutors={tutors}
+              searchQuery={searchQuery}
+              onUnauthorized={handleLogout}
+              onRefreshLookups={fetchLookups}
+              onData={setAssignments}
+            />
+          ) : dataLoading ? (
             <div className="py-20 text-center text-muted-grey text-sm flex flex-col items-center justify-center space-y-2">
               <RefreshCw className="h-8 w-8 text-primary-400 animate-spin" />
               <span>Loading record database...</span>

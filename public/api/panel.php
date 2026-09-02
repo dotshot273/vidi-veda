@@ -11,6 +11,13 @@ $action = $_GET['action'] ?? '';
 try {
     switch ($action) {
         case 'login':
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                echo json_encode([
+                    "success" => true,
+                    "message" => "Admin API is online. Send a POST request to log in."
+                ]);
+                break;
+            }
             handleLogin();
             break;
 
