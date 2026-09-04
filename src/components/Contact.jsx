@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Phone, MessageCircle, Mail, Clock, Loader2, CheckCircle2 } from 'lucide-react';
+import { apiUrl } from '../config';
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function Contact() {
     setError(null);
 
     try {
-      const response = await fetch('/api/api.php?action=submit_contact', {
+      const response = await fetch(apiUrl('/api/api.php?action=submit_contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

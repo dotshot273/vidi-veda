@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Import Pages
 import Home from './pages/Home';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminPanel from './pages/AdminPanel';
 import SeoCityPage from './pages/SeoCityPage';
 import ServicesPage from './pages/ServicesPage';
 import ContactPage from './pages/ContactPage';
@@ -26,10 +26,10 @@ export default function App() {
         <Route path="/frequently-asked-questions" element={<FAQPage />} />
         
         {/* Admin dashboard — /dashboard is a fallback if /admin is blocked by the host */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/" element={<AdminDashboard />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/dashboard/" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin/" element={<AdminPanel />} />
+        <Route path="/dashboard" element={<AdminPanel />} />
+        <Route path="/dashboard/" element={<AdminPanel />} />
         
         {/* Dynamic SEO Landing Pages */}
         <Route path="/tutors-in-bareilly" element={<SeoCityPage />} />

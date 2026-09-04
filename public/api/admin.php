@@ -5,10 +5,16 @@
 
 header('Content-Type: application/json');
 require_once 'config.php';
+require_once __DIR__ . '/crm.inc.php';
 
 $action = $_GET['action'] ?? '';
 
 try {
+    if ($action === '' || ($action === 'login' && ($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST')) {
+        echo json_encode(["success" => true, "message" => "Admin API is online"]);
+        exit;
+    }
+
     switch ($action) {
         case 'login':
             handleLogin();
@@ -52,6 +58,75 @@ try {
         case 'update_assignment_status':
             requireAuth();
             handleUpdateAssignmentStatus();
+            break;
+
+        case 'get_crm':
+            requireAuth();
+            handleGetCrm();
+            break;
+        case 'add_lead':
+            requireAuth();
+            handleCrmAddLead();
+            break;
+        case 'update_lead_status':
+            requireAuth();
+            handleCrmUpdateLeadStatus();
+            break;
+        case 'add_teacher':
+            requireAuth();
+            handleCrmAddTeacher();
+            break;
+        case 'update_teacher':
+            requireAuth();
+            handleCrmUpdateTeacher();
+            break;
+        case 'assign_teacher':
+            requireAuth();
+            handleCrmAssignTeacher();
+            break;
+        case 'schedule_demo':
+            requireAuth();
+            handleCrmScheduleDemo();
+            break;
+        case 'update_demo_day':
+            requireAuth();
+            handleCrmUpdateDemoDay();
+            break;
+        case 'submit_demo_feedback':
+            requireAuth();
+            handleCrmDemoFeedback();
+            break;
+        case 'record_payment':
+            requireAuth();
+            handleCrmRecordPayment();
+            break;
+        case 'record_commission':
+            requireAuth();
+            handleCrmRecordCommission();
+            break;
+        case 'send_reminder':
+            requireAuth();
+            handleCrmSendReminder();
+            break;
+        case 'add_followup':
+            requireAuth();
+            handleCrmAddFollowUp();
+            break;
+        case 'update_followup':
+            requireAuth();
+            handleCrmUpdateFollowUp();
+            break;
+        case 'import_leads':
+            requireAuth();
+            handleCrmImportLeads();
+            break;
+        case 'import_teachers':
+            requireAuth();
+            handleCrmImportTeachers();
+            break;
+        case 'reset_crm':
+            requireAuth();
+            handleCrmReset();
             break;
             
         default:

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Phone, MapPin, Plus, Trash2, CheckCircle2, ChevronRight, ChevronLeft, Calendar, BookOpen, Loader2 } from 'lucide-react';
+import { apiUrl } from '../config';
 
 const CITIES = ["Bareilly", "Meerut", "Lucknow", "Kanpur", "Jaipur", "Indore", "Patna", "Ranchi", "Dehradun", "Other"];
 const CLASSES = Array.from({ length: 12 }, (_, i) => `Class ${i + 1}`);
@@ -164,7 +165,7 @@ export default function StudentForm() {
     });
 
     try {
-      const response = await fetch('/api/api.php?action=register_student', {
+      const response = await fetch(apiUrl('/api/api.php?action=register_student'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

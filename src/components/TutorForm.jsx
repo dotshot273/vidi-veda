@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { User, Phone, GraduationCap, BookOpen, Clock, MapPin, Upload, FileText, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { apiUrl } from '../config';
 
 const SUBJECTS = ["All Subjects (Primary)", "Mathematics", "Physics", "Chemistry", "Biology", "English Literature & Grammar", "Social Studies", "Computer Programming (Java/Python)", "Accountancy & Commerce"];
 const EXPERIENCE_OPTIONS = ["Freshers / No formal tuition experience", "1 - 2 Years", "3 - 5 Years", "More than 5 Years"];
@@ -83,7 +84,7 @@ export default function TutorForm() {
     formData.append('id_proof', idProof);
 
     try {
-      const response = await fetch('/api/api.php?action=register_tutor', {
+      const response = await fetch(apiUrl('/api/api.php?action=register_tutor'), {
         method: 'POST',
         body: formData, // Fetch automatically handles content-type for FormData
       });
